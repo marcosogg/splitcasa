@@ -10,9 +10,7 @@ interface Group {
   id: string;
   name: string;
   currency: string;
-  _count: {
-    members: number;
-  };
+  member_count: number;
   total_balance: number;
 }
 
@@ -21,25 +19,13 @@ const Index = () => {
     queryKey: ["groups"],
     queryFn: async () => {
       const { data: groupsData, error: groupsError } = await supabase
-        .from("groups")
-        .select(`
-          id,
-          name,
-          currency,
-          participants(count),
-          expenses(sum:amount)
-        `)
+        .from("group_summaries")
+        .select("*")
         .throwOnError();
 
       if (groupsError) throw groupsError;
 
-      return groupsData.map((group) => ({
-        ...group,
-        _count: {
-          members: group.participants?.[0]?.count || 0,
-        },
-        total_balance: group.expenses?.[0]?.sum || 0,
-      }));
+      return groupsData;
     },
   });
 
@@ -88,7 +74,7 @@ const Index = () => {
               id={group.id}
               name={group.name}
               currency={group.currency}
-              memberCount={group._count.members}
+              memberCount={group.member_count}
               totalBalance={group.total_balance}
             />
           ))}

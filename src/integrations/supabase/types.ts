@@ -52,6 +52,13 @@ export type Database = {
             foreignKeyName: "activities_group_id_fkey"
             columns: ["group_id"]
             isOneToOne: false
+            referencedRelation: "group_summaries"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "activities_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
             referencedRelation: "groups"
             referencedColumns: ["id"]
           },
@@ -217,6 +224,13 @@ export type Database = {
             foreignKeyName: "expenses_group_id_fkey"
             columns: ["group_id"]
             isOneToOne: false
+            referencedRelation: "group_summaries"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "expenses_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
             referencedRelation: "groups"
             referencedColumns: ["id"]
           },
@@ -283,6 +297,13 @@ export type Database = {
             foreignKeyName: "participants_group_id_fkey"
             columns: ["group_id"]
             isOneToOne: false
+            referencedRelation: "group_summaries"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "participants_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
             referencedRelation: "groups"
             referencedColumns: ["id"]
           },
@@ -341,7 +362,16 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      group_summaries: {
+        Row: {
+          currency: string | null
+          id: string | null
+          member_count: number | null
+          name: string | null
+          total_balance: number | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       binary_quantize:
