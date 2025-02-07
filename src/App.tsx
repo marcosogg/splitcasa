@@ -10,6 +10,7 @@ import { Layout } from "./components/Layout";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
+import CreateGroup from "./pages/CreateGroup";
 
 const queryClient = new QueryClient();
 
@@ -28,6 +29,16 @@ const App = () => (
                 <RequireAuth>
                   <Layout>
                     <Index />
+                  </Layout>
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/groups/new"
+              element={
+                <RequireAuth>
+                  <Layout>
+                    <CreateGroup />
                   </Layout>
                 </RequireAuth>
               }

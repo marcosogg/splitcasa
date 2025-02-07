@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { GroupCard, GroupCardSkeleton } from "@/components/GroupCard";
+import { Link } from "react-router-dom";
 
 interface Group {
   id: string;
@@ -38,8 +39,10 @@ const Index = () => {
             Manage your shared expenses with friends and family
           </p>
         </div>
-        <Button size="lg">
-          <Plus className="mr-2" /> New Group
+        <Button size="lg" asChild>
+          <Link to="/groups/new">
+            <Plus className="mr-2" /> New Group
+          </Link>
         </Button>
       </div>
 
@@ -52,7 +55,11 @@ const Index = () => {
       ) : error ? (
         <div className="text-center py-12">
           <p className="text-muted-foreground">Failed to load groups</p>
-          <Button variant="outline" className="mt-4" onClick={() => window.location.reload()}>
+          <Button
+            variant="outline"
+            className="mt-4"
+            onClick={() => window.location.reload()}
+          >
             Try again
           </Button>
         </div>
@@ -62,8 +69,10 @@ const Index = () => {
           <p className="text-muted-foreground mt-1">
             Create a group to start sharing expenses
           </p>
-          <Button className="mt-4">
-            <Plus className="mr-2" /> Create your first group
+          <Button className="mt-4" asChild>
+            <Link to="/groups/new">
+              <Plus className="mr-2" /> Create your first group
+            </Link>
           </Button>
         </div>
       ) : (
