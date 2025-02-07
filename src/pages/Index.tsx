@@ -36,9 +36,10 @@ const Index = () => {
       return groupsData.map((group) => ({
         ...group,
         _count: {
-          members: group.participants[0].count || 0,
+          members: group.participants?.[0]?.count || 0,
         },
-        total_balance: group.expenses[0].sum || 0,
+        // Ensure we always return a number for total_balance
+        total_balance: group.expenses?.[0]?.sum || 0,
       }));
     },
   });
