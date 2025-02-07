@@ -26,8 +26,8 @@ const Index = () => {
           id,
           name,
           currency,
-          participants:participants(count),
-          total_balance:expenses(sum:amount)
+          participants(count),
+          expenses(sum)
         `)
         .throwOnError();
 
@@ -38,7 +38,7 @@ const Index = () => {
         _count: {
           members: group.participants?.[0]?.count || 0,
         },
-        total_balance: group.total_balance?.[0]?.sum || 0,
+        total_balance: group.expenses?.[0]?.sum || 0,
       }));
     },
   });
