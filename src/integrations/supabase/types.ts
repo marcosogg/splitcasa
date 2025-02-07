@@ -9,6 +9,285 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      activities: {
+        Row: {
+          activity_type: Database["public"]["Enums"]["activity_type"]
+          created_by: string | null
+          data: Json | null
+          expense_id: string | null
+          group_id: string | null
+          id: string
+          participant_id: string | null
+          time: string | null
+        }
+        Insert: {
+          activity_type: Database["public"]["Enums"]["activity_type"]
+          created_by?: string | null
+          data?: Json | null
+          expense_id?: string | null
+          group_id?: string | null
+          id?: string
+          participant_id?: string | null
+          time?: string | null
+        }
+        Update: {
+          activity_type?: Database["public"]["Enums"]["activity_type"]
+          created_by?: string | null
+          data?: Json | null
+          expense_id?: string | null
+          group_id?: string | null
+          id?: string
+          participant_id?: string | null
+          time?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "activities_expense_id_fkey"
+            columns: ["expense_id"]
+            isOneToOne: false
+            referencedRelation: "expenses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "activities_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "groups"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "activities_participant_id_fkey"
+            columns: ["participant_id"]
+            isOneToOne: false
+            referencedRelation: "participants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      categories: {
+        Row: {
+          grouping: string
+          id: number
+          name: string
+        }
+        Insert: {
+          grouping: string
+          id?: number
+          name: string
+        }
+        Update: {
+          grouping?: string
+          id?: number
+          name?: string
+        }
+        Relationships: []
+      }
+      expense_documents: {
+        Row: {
+          created_at: string | null
+          created_by: string | null
+          expense_id: string | null
+          height: number | null
+          id: string
+          url: string
+          width: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          created_by?: string | null
+          expense_id?: string | null
+          height?: number | null
+          id?: string
+          url: string
+          width?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string | null
+          expense_id?: string | null
+          height?: number | null
+          id?: string
+          url?: string
+          width?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "expense_documents_expense_id_fkey"
+            columns: ["expense_id"]
+            isOneToOne: false
+            referencedRelation: "expenses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      expense_participants: {
+        Row: {
+          amount: number | null
+          expense_id: string
+          participant_id: string
+          percentage: number | null
+          shares: number | null
+        }
+        Insert: {
+          amount?: number | null
+          expense_id: string
+          participant_id: string
+          percentage?: number | null
+          shares?: number | null
+        }
+        Update: {
+          amount?: number | null
+          expense_id?: string
+          participant_id?: string
+          percentage?: number | null
+          shares?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "expense_participants_expense_id_fkey"
+            columns: ["expense_id"]
+            isOneToOne: false
+            referencedRelation: "expenses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "expense_participants_participant_id_fkey"
+            columns: ["participant_id"]
+            isOneToOne: false
+            referencedRelation: "participants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      expenses: {
+        Row: {
+          amount: number
+          category_id: number | null
+          created_at: string | null
+          created_by: string | null
+          expense_date: string | null
+          group_id: string | null
+          id: string
+          is_reimbursement: boolean | null
+          notes: string | null
+          paid_by_id: string | null
+          split_mode: Database["public"]["Enums"]["split_mode"] | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          amount: number
+          category_id?: number | null
+          created_at?: string | null
+          created_by?: string | null
+          expense_date?: string | null
+          group_id?: string | null
+          id?: string
+          is_reimbursement?: boolean | null
+          notes?: string | null
+          paid_by_id?: string | null
+          split_mode?: Database["public"]["Enums"]["split_mode"] | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          amount?: number
+          category_id?: number | null
+          created_at?: string | null
+          created_by?: string | null
+          expense_date?: string | null
+          group_id?: string | null
+          id?: string
+          is_reimbursement?: boolean | null
+          notes?: string | null
+          paid_by_id?: string | null
+          split_mode?: Database["public"]["Enums"]["split_mode"] | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "expenses_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "expenses_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "groups"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "expenses_paid_by_id_fkey"
+            columns: ["paid_by_id"]
+            isOneToOne: false
+            referencedRelation: "participants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      groups: {
+        Row: {
+          created_at: string | null
+          created_by: string | null
+          currency: string | null
+          id: string
+          information: string | null
+          name: string
+        }
+        Insert: {
+          created_at?: string | null
+          created_by?: string | null
+          currency?: string | null
+          id?: string
+          information?: string | null
+          name: string
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string | null
+          currency?: string | null
+          id?: string
+          information?: string | null
+          name?: string
+        }
+        Relationships: []
+      }
+      participants: {
+        Row: {
+          created_at: string | null
+          group_id: string | null
+          id: string
+          name: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          group_id?: string | null
+          id?: string
+          name: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          group_id?: string | null
+          id?: string
+          name?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "participants_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "groups"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -239,7 +518,12 @@ export type Database = {
       }
     }
     Enums: {
-      [_ in never]: never
+      activity_type:
+        | "UPDATE_GROUP"
+        | "CREATE_EXPENSE"
+        | "UPDATE_EXPENSE"
+        | "DELETE_EXPENSE"
+      split_mode: "EVENLY" | "BY_SHARES" | "BY_PERCENTAGE" | "BY_AMOUNT"
     }
     CompositeTypes: {
       [_ in never]: never
