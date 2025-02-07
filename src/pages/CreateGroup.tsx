@@ -17,6 +17,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { z } from "zod";
 import { X } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { useMutation } from "@tanstack/react-query";
 
 const createGroupSchema = z.object({
   name: z.string().min(1, "Group name is required"),
@@ -46,14 +48,55 @@ const CreateGroup = () => {
     },
   });
 
-  const onSubmit = async (data: CreateGroupForm) => {
-    // Form submission will be implemented after we set up the necessary Supabase tables and policies
-    console.log(data);
-    toast({
-      title: "Group created successfully",
-      description: "You will be redirected to the group page",
-    });
-    navigate("/");
+  const createGroupMutation = useMutation({
+    mutationFn: async (data: CreateGroupForm) => {
+      // Insert the group
+      const { data: group, error: groupError } = await supabase
+        .from("groups")
+        .insert({
+          name: data.name,
+          currency: data.currency,
+          information: data.information || null,
+          created_by: user?.id,
+        })
+        .select()
+        .single();
+
+      if (groupError) throw groupError;
+
+      // Insert participants
+      const participants = data.participants.map((p) => ({
+        name: p.name,
+        group_id: group.id,
+        user_id: p.name === user?.email?.split("@")[0] ? user?.id : null,
+      }));
+
+      const { error: participantsError } = await supabase
+        .from("participants")
+        .insert(participants);
+
+      if (participantsError) throw participantsError;
+
+      return group;
+    },
+    onSuccess: () => {
+      toast({
+        title: "Group created successfully",
+        description: "You will be redirected to the group page",
+      });
+      navigate("/");
+    },
+    onError: (error) => {
+      toast({
+        title: "Error creating group",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  const onSubmit = (data: CreateGroupForm) => {
+    createGroupMutation.mutate(data);
   };
 
   return (
@@ -184,7 +227,12 @@ const CreateGroup = () => {
             >
               Cancel
             </Button>
-            <Button type="submit">Create Group</Button>
+            <Button 
+              type="submit"
+              disabled={createGroupMutation.isPending}
+            >
+              {createGroupMutation.isPending ? "Creating..." : "Create Group"}
+            </Button>
           </div>
         </form>
       </Form>
