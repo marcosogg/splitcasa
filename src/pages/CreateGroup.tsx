@@ -1,16 +1,16 @@
 
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/components/AuthProvider";
-import { CreateGroupForm } from "@/features/groups/components/create-group-form";
+import { CreateGroupFormComponent } from "@/features/groups/components/create-group-form";
 import { useCreateGroup } from "@/features/groups/hooks/use-create-group";
-import type { CreateGroupForm as CreateGroupFormType } from "@/features/groups/schemas/create-group-schema";
+import type { CreateGroupForm } from "@/features/groups/schemas/create-group-schema";
 
 const CreateGroup = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const createGroupMutation = useCreateGroup();
 
-  const onSubmit = (data: CreateGroupFormType) => {
+  const onSubmit = (data: CreateGroupForm) => {
     createGroupMutation.mutate({ ...data, userId: user?.id as string });
   };
 
@@ -23,7 +23,7 @@ const CreateGroup = () => {
         </p>
       </div>
 
-      <CreateGroupForm
+      <CreateGroupFormComponent
         defaultParticipantName={user?.email?.split("@")[0] || ""}
         onSubmit={onSubmit}
         onCancel={() => navigate("/groups")}
