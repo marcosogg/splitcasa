@@ -1,17 +1,37 @@
-
 import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
+import { useAuth } from "@/components/AuthProvider";
+import { supabase } from "@/integrations/supabase/client";
+import { useNavigate } from "react-router-dom";
 import { 
   ArrowRight, 
   CheckCircle2, 
-  ChevronRight, 
+  ChevronRight,
+  LogOut,
   MoveRight,
-  Sparkles
+  Sparkles,
+  User
 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const Index = () => {
   const { toast } = useToast();
   const [email, setEmail] = useState("");
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSignOut = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      toast({
+        title: "Error signing out",
+        description: error.message,
+        variant: "destructive",
+      });
+    } else {
+      navigate("/auth");
+    }
+  };
 
   const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,6 +46,18 @@ const Index = () => {
 
   return (
     <div className="min-h-screen">
+      {/* User Menu */}
+      <div className="absolute top-4 right-4 flex items-center gap-4">
+        <div className="flex items-center gap-2">
+          <User className="w-5 h-5" />
+          <span>{user?.email}</span>
+        </div>
+        <Button variant="outline" size="sm" onClick={handleSignOut}>
+          <LogOut className="w-4 h-4 mr-2" />
+          Sign Out
+        </Button>
+      </div>
+
       {/* Hero Section */}
       <section className="relative h-screen flex items-center justify-center px-4">
         <div className="absolute inset-0 bg-gradient-to-b from-secondary/50 to-transparent" />

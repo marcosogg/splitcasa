@@ -13,25 +13,49 @@ export type Database = {
         Row: {
           avatar_url: string | null
           created_at: string
+          default_currency: string | null
           email: string
+          email_notifications: boolean | null
+          expense_notifications: boolean | null
           id: string
           name: string
+          payment_details: Json | null
+          phone_number: string | null
+          preferred_payment_method: string | null
+          settlement_notifications: boolean | null
+          timezone: string | null
           updated_at: string
         }
         Insert: {
           avatar_url?: string | null
           created_at?: string
+          default_currency?: string | null
           email: string
+          email_notifications?: boolean | null
+          expense_notifications?: boolean | null
           id: string
           name: string
+          payment_details?: Json | null
+          phone_number?: string | null
+          preferred_payment_method?: string | null
+          settlement_notifications?: boolean | null
+          timezone?: string | null
           updated_at?: string
         }
         Update: {
           avatar_url?: string | null
           created_at?: string
+          default_currency?: string | null
           email?: string
+          email_notifications?: boolean | null
+          expense_notifications?: boolean | null
           id?: string
           name?: string
+          payment_details?: Json | null
+          phone_number?: string | null
+          preferred_payment_method?: string | null
+          settlement_notifications?: boolean | null
+          timezone?: string | null
           updated_at?: string
         }
         Relationships: []
