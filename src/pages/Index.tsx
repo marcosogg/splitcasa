@@ -27,7 +27,7 @@ const Index = () => {
           name,
           currency,
           participants(count),
-          expenses(sum)
+          expenses(sum:amount)
         `)
         .throwOnError();
 
