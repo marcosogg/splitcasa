@@ -1,5 +1,5 @@
 
-import { useForm } from "react-hook-form";
+import { useForm, useFieldArray } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAuth } from "@/components/AuthProvider";
@@ -48,6 +48,12 @@ const CreateGroup = () => {
     },
   });
 
+  // Use useFieldArray for better performance with dynamic form fields
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: "participants",
+  });
+
   const createGroupMutation = useMutation({
     mutationFn: async (data: CreateGroupForm) => {
       // Insert the group
@@ -79,12 +85,13 @@ const CreateGroup = () => {
 
       return group;
     },
-    onSuccess: () => {
+    onSuccess: (group) => {
       toast({
         title: "Group created successfully",
         description: "You will be redirected to the group page",
       });
-      navigate("/");
+      // Navigate to the specific group page instead of the dashboard
+      navigate(`/groups/${group.id}`);
     },
     onError: (error) => {
       toast({
@@ -169,20 +176,15 @@ const CreateGroup = () => {
               <Button
                 type="button"
                 variant="outline"
-                onClick={() =>
-                  form.setValue("participants", [
-                    ...form.getValues("participants"),
-                    { name: "" },
-                  ])
-                }
+                onClick={() => append({ name: "" })}
               >
                 Add Participant
               </Button>
             </div>
 
-            {form.getValues("participants").map((_, index) => (
+            {fields.map((field, index) => (
               <FormField
-                key={index}
+                key={field.id}
                 control={form.control}
                 name={`participants.${index}.name`}
                 render={({ field }) => (
@@ -199,14 +201,7 @@ const CreateGroup = () => {
                           type="button"
                           variant="outline"
                           size="icon"
-                          onClick={() => {
-                            const currentParticipants =
-                              form.getValues("participants");
-                            form.setValue(
-                              "participants",
-                              currentParticipants.filter((_, i) => i !== index)
-                            );
-                          }}
+                          onClick={() => remove(index)}
                         >
                           <X className="h-4 w-4" />
                         </Button>
@@ -223,7 +218,7 @@ const CreateGroup = () => {
             <Button
               type="button"
               variant="outline"
-              onClick={() => navigate("/")}
+              onClick={() => navigate("/groups")}
             >
               Cancel
             </Button>
