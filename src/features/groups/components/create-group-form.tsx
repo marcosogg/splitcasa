@@ -15,19 +15,19 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { createGroupSchema, type CreateGroupForm } from "../schemas/create-group-schema";
 
-interface CreateGroupFormComponentProps {
+interface Props {
   defaultParticipantName: string;
   onSubmit: (data: CreateGroupForm) => void;
   onCancel: () => void;
   isPending: boolean;
 }
 
-export const CreateGroupForm = ({
+export const CreateGroupFormComponent = ({
   defaultParticipantName,
   onSubmit,
   onCancel,
   isPending,
-}: CreateGroupFormComponentProps) => {
+}: Props) => {
   const form = useForm<CreateGroupForm>({
     resolver: zodResolver(createGroupSchema),
     defaultValues: {
